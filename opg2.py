@@ -17,7 +17,6 @@ I = (w*(d**3))/12
 f = -density*w*d*g
 
 
-
 def lagA(n):
     e = sp.ones(n)
     A = spdiags([e, -4 * e, 6 * e, -4 * e, e], [-2, -1, 0, 1, 2], n, n)
@@ -40,4 +39,7 @@ def solveForYc(n, c):
     y = spsolve(A, b)
     return y[c]
 
-print(solveForYc(10, 9))
+
+for i in range(0, 20):
+    x = i/10
+    print(((f*(x**2))/(24*E*I))*((6*(L**2))-(4*L*x)+x**2))
