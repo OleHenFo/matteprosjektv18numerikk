@@ -40,9 +40,11 @@ def solveForYc(n, c):
     y = spsolve(A, b)
     return y
 
+def fasit(n):
+    svar = np.zeros(n)
+    for i in range(0, n):
+        x = (L /n) * i
+        svar[i] = ((f * (x ** 2)) / (24 * E * I)) * ((6 * (L ** 2)) - (4 * L * x) + x ** 2)
+    return svar
 
-for i in range(0, 20):
-    x = (L / 20) * i
-    print(((f * (x ** 2)) / (24 * E * I)) * ((6 * (L ** 2)) - (4 * L * x) + x ** 2))
-
-# print(solveForYc(10, 0))
+print(fasit(200))
