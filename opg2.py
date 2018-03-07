@@ -6,7 +6,7 @@ from scipy.sparse import csr_matrix
 from scipy.sparse.linalg import spsolve
 
 density = 480
-L = 10
+L = 2
 E = 1.3 * (10 ** 10)
 w = 0.3
 d = 0.03
@@ -41,8 +41,8 @@ def solveForYc(n, c):
     return y
 
 
-
 for i in range(0, 20):
-    x = i/10
-    print(((f*(x**2))/(24*E*I))*((6*(L**2))-(4*L*x)+x**2))
-print(solveForYc(10, 0))
+    x = (L / 20) * i
+    print(((f * (x ** 2)) / (24 * E * I)) * ((6 * (L ** 2)) - (4 * L * x) + x ** 2))
+
+# print(solveForYc(10, 0))
