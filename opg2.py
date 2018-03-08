@@ -21,7 +21,7 @@ def lagA(n):
     A = lil_matrix(A)
     B = csr_matrix([[16, -9, 8 / 3, -1 / 4],
                     [16 / 17, -60 / 17, 72 / 17, -28 / 17],
-                    [-12 / 17, 96 / 17, -156 / 16, 72 / 17]])
+                    [-12 / 17, 96 / 17, -156 / 17, 72 / 17]])
     A[0, 0:4] = B[0, :]
     A[n - 2, n - 4:n] = B[1, :]
     A[n - 1, n - 4:n] = B[2, :]
@@ -31,20 +31,21 @@ def lagA(n):
 def solveForYc(n, c):
     A = csr_matrix(lagA(n))
     h = L / n
-    print(f)
+   #  print(A.todense())
 
     const = ((h ** 4) / (E * I)) * f
-    b = sp.asmatrix([const] * n).T
-    # b[n-1] = b[n-1]*50
-
+    b = np.array([const] * n)
+    print(b)
     y = spsolve(A, b)
     return y
+
 
 def fasit(n):
     svar = np.zeros(n)
     for i in range(0, n):
-        x = (L /n) * i
+        x = (L / n) * i
         svar[i] = ((f * (x ** 2)) / (24 * E * I)) * ((6 * (L ** 2)) - (4 * L * x) + x ** 2)
     return svar
 
-print(fasit(200))
+
+print(solveForYc(20,0))
