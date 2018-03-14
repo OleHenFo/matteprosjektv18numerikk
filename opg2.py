@@ -31,10 +31,8 @@ def lagA(n):
 def solveForYc(n, c):
     A = csr_matrix(lagA(n))
     h = L / n
-    #  print(A.todense())
     const = ((h ** 4) / (E * I)) * f
     b = np.array([const] * n)
-    print(b)
     y = spsolve(A, b)
     return y
 
@@ -47,4 +45,8 @@ def fasit(n):
     return svar
 
 
-print(solveForYc(20, 0))
+n = 20
+c = 0
+print("Fasit: ", fasit(n))
+print()
+print(solveForYc(n, c))
