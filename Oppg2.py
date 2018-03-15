@@ -34,19 +34,18 @@ def solveForYc(n, c):
     const = ((h ** 4) / (E * I)) * f
     b = np.array([const] * n)
     y = spsolve(A, b)
-    return y
+    return y[c]
 
 
 def fasit(n):
     svar = np.zeros(n)
-    for i in range(0, n):
+    for i in range(1, n + 1):
         x = (L / n) * i
-        svar[i] = ((f * (x ** 2)) / (24 * E * I)) * ((6 * (L ** 2)) - (4 * L * x) + x ** 2)
+        svar[i-1] = ((f * (x ** 2)) / (24 * E * I)) * ((6 * (L ** 2)) - (4 * L * x) + x ** 2)
     return svar
 
-
-n = 20
-c = 0
-print("Fasit: ", fasit(n))
-print()
-print(solveForYc(n, c))
+#
+# n = 20
+# c = 19
+# print("Fasit: ", fasit(n))
+# print(solveForYc(n, c))
