@@ -40,7 +40,7 @@ def solveForYc(n, c):
     return y[c]
 
 
-def fasit(n):
+def lagFasit(n):
     svar = np.zeros(n)
     for i in range(1, n + 1):
         x = (L / n) * i
@@ -59,36 +59,36 @@ def linsolv():
 
 def findMaxError():
     list = linsolv()
-    ans = fasit(10)[9]
+    ans = lagFasit(10)[9]
     for i in range(0, len(list)):
         list[i] -= ans
     return list
 
 
 # Oppgave 2
+print("Oppgave 2: ")
 A = lagA(n)
 print(A.todense())
+print("--------------------------------")
+print("")
+
+# Oppgave 3
+print("Oppgave 3: ")
+print()
+print("--------------------------------")
+print("")
 
 # Oppgave 4 (Må fikses)
-"""
-def korrektY(f, E, I, x, L):
-    return (f / (23 * E * I)) * x ** 2 * (x ** 2 - 4 * L * x + 6 * L ** 2)
+print("Oppgave 4: ")
+print(lagFasit(n))
 
+print("--------------------------------")
+print("")
 
-x = [0.2, 0.4, 0.6, 0.8, 1.0, 1.2, 1.4, 1.6, 1.8, 2.0]
-y_e = len(x) * [0]
-
-for i in range(0, len(x) - 1):
-    y_e[i] = (korrektY(f, E, I, x[i], L))
-
-A = Oppg2.lagA(len(y_e))
-
-print("Prøver:")
-fjerdeDerivertAvY = A.dot(y_e)
-print("Done")
-print(fjerdeDerivertAvY)
-"""
 
 # Oppgave 5
+print("Oppgave 5: ")
 error = findMaxError()
 print(error)
+print("--------------------------------")
+print("")
