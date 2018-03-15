@@ -5,6 +5,9 @@ from scipy.sparse import lil_matrix
 from scipy.sparse import csr_matrix
 from scipy.sparse.linalg import spsolve
 
+
+n = 20
+
 density = 480
 L = 2
 E = 1.3 * (10 ** 10)
@@ -44,8 +47,48 @@ def fasit(n):
         svar[i-1] = ((f * (x ** 2)) / (24 * E * I)) * ((6 * (L ** 2)) - (4 * L * x) + x ** 2)
     return svar
 
-#
-# n = 20
-# c = 19
-# print("Fasit: ", fasit(n))
-# print(solveForYc(n, c))
+
+def linsolv():
+    n = 10
+    list = []
+    while n < 10 * 2 ** 11:
+        list.append(solveForYc(n, n - 1))
+        n *= 2
+    return list
+
+
+def findMaxError():
+    list = linsolv()
+    ans = fasit(10)[9]
+    for i in range(0, len(list)):
+        list[i] -= ans
+    return list
+
+
+# Oppgave 2
+A = lagA(n)
+print(A.todense())
+
+# Oppgave 4 (Må fikses)
+"""
+def korrektY(f, E, I, x, L):
+    return (f / (23 * E * I)) * x ** 2 * (x ** 2 - 4 * L * x + 6 * L ** 2)
+
+
+x = [0.2, 0.4, 0.6, 0.8, 1.0, 1.2, 1.4, 1.6, 1.8, 2.0]
+y_e = len(x) * [0]
+
+for i in range(0, len(x) - 1):
+    y_e[i] = (korrektY(f, E, I, x[i], L))
+
+A = Oppg2.lagA(len(y_e))
+
+print("Prøver:")
+fjerdeDerivertAvY = A.dot(y_e)
+print("Done")
+print(fjerdeDerivertAvY)
+"""
+
+# Oppgave 5
+error = findMaxError()
+print(error)
