@@ -6,7 +6,7 @@ from scipy.sparse import csr_matrix
 from scipy.sparse.linalg import spsolve
 
 
-n = 20
+n = 10
 
 density = 480
 L = 2
@@ -31,29 +31,29 @@ def lagA(n):
     return A
 
 
-def solveForYc(n, c):
+def solveForYc(n):
     A = csr_matrix(lagA(n))
     h = L / n
     const = ((h ** 4) / (E * I)) * f
     b = np.array([const] * n)
     y = spsolve(A, b)
-    return y[c]
+    return y
 
 
 def lagFasit(n):
     svar = np.zeros(n)
     for i in range(1, n + 1):
         x = (L / n) * i
-        svar[i-1] = ((f * (x ** 2)) / (24 * E * I)) * ((6 * (L ** 2)) - (4 * L * x) + x ** 2)
+        svar[i - 1] = ((f * (x ** 2)) / (24 * E * I)) * ((6 * (L ** 2)) - (4 * L * x) + x ** 2)
     return svar
 
 
 def linsolv():
-    n = 10
+    nyN = 10
     list = []
-    while n < 10 * 2 ** 11:
-        list.append(solveForYc(n, n - 1))
-        n *= 2
+    while nyN < 10 * 2 ** 11:
+        list.append(solveForYc(nyN)[nyN - 1])
+        nyN *= 2
     return list
 
 
@@ -62,7 +62,38 @@ def findMaxError():
     ans = lagFasit(10)[9]
     for i in range(0, len(list)):
         list[i] -= ans
-    return list
+    maxIndex = np.argmax(np.abs(list))
+    max = np.max(np.abs(list))
+    return max, maxIndex, list
+
+
+def getConditionNumber():
+    nyN = 10
+    condlist = []
+    while nyN < 2000:
+
+        m = lagA(nyN).todense()
+        condNr = np.linalg.cond(m,1)
+        condlist.append(int(condNr))
+        nyN *= 2
+    return condlist
+
+def withADudeOnIt():
+    myN = 20 # Using n = 20, to correctly add the force of the person, while keeping
+    A = csr_matrix(lagA(myN))
+    h = L / myN
+    const = ((h ** 4) / (E * I)) * f
+    b = np.array([const] * myN)
+    b[myN-1] -= ((h ** 4) / (E * I))*(g*50/0.3)  # at L
+    b[myN-2] -= ((h ** 4) / (E * I))*(g*50/0.3)  # at L-0.1
+    b[myN-3] -= ((h ** 4) / (E * I))*(g*50/0.3)  # at L-0.2
+    b[myN-4] -= ((h ** 4) / (E * I))*(g*50/0.3)  # at L-0.3
+    y = spsolve(A, b)
+    return y
+
+
+
+
 
 
 # Oppgave 2
@@ -85,10 +116,18 @@ print(lagFasit(n))
 print("--------------------------------")
 print("")
 
-
 # Oppgave 5
 print("Oppgave 5: ")
-error = findMaxError()
-print(error)
+error, errorIndex, errorList = findMaxError()
+condList = getConditionNumber()
+print("List of errors at x= L with n multiplying by two for each element:")
+print(errorList)
+print ("The largest error is "+str(error)+", which is number "+ str(errorIndex)+" in our list. This makes sense when we "
+                                                                          "look at the condition number for the different matrices : \n    ")
+print(condList)
+print("Note that we stopped at n = 1280 as computations take too long for larger matrices \n MERK: LEGG UT OM TEORI OM KONDISJONSNUMMER HER"
+      "\n VELGER HER 1-NORM UTEN Å HA NOE PEILING PÅ HVORFOR....")
+print("Position of the board with a man on top of it:")
+print(withADudeOnIt())
 print("--------------------------------")
 print("")
