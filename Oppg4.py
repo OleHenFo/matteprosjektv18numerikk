@@ -19,14 +19,14 @@ def korrektY(f,E,I,x,L):
     return (f/(24*E*I))*x**2*(x**2-4*L*x+6*L**2)
 
 x = [0.2, 0.4, 0.6, 0.8, 1.0, 1.2, 1.4, 1.6, 1.8, 2.0]
+
 y_e = len(x) * [0]
 
 for i in range(0, len(x)-1):
     y_e[i] = (korrektY(f, E, I, x[i], L))
 
 A = opg2.lagA(len(y_e))
-
-print("Prøver:")
+print(A)
 fjerdeDerivertAvY = A.dot(y_e)
 print("Done")
 print(fjerdeDerivertAvY)
