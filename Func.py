@@ -1,5 +1,6 @@
 import scipy as sp
 import numpy as np
+import matplotlib.pyplot as pl
 from scipy.sparse import spdiags
 from scipy.sparse import lil_matrix
 from scipy.sparse import csr_matrix
@@ -43,9 +44,9 @@ def solveForYc(n):
 
 def lagFasit(n):
     svar = np.zeros(n)
-    for i in range(1, n + 1):
+    for i in range(0, n):
         x = (L / n) * i
-        svar[i - 1] = ((f * (x ** 2)) / (24 * E * I)) * ((6 * (L ** 2)) - (4 * L * x) + x ** 2)
+        svar[i] = ((f * (x ** 2)) / (24 * E * I)) * ((6 * (L ** 2)) - (4 * L * x) + x ** 2)
     return svar
 
 
@@ -93,8 +94,14 @@ def withADudeOnIt():
     return y
 
 
-
-
+def withASineOnIt(yvektor):
+    p = 0.01
+    nn = len(yvektor)
+    svar = np.zeros(nn)
+    for i in range(0, nn):
+        x = (L / n) * i
+        svar[i] = yvektor[i] - (p * g * np.sin((np.pi/L)*x))
+    return svar
 
 
 # Oppgave 2
@@ -113,6 +120,13 @@ print("")
 
 # Oppgave 4 (Må fikses)
 print("Oppgave 4: ")
+xx = np.arange(0,n,1)
+yy = lagFasit(n)
+pl.plot(xx, yy)
+pl.axis([0, n, -0.2, 0.2])
+pl.title("Fasit")
+pl.show()
+
 y_e = lagFasit(n)
 print(y_e)
 b_e = 1/h**4 * np.dot(A.todense(), y_e)
@@ -141,9 +155,29 @@ print("Note that we stopped at n = 1280 as computations take too long for larger
 print("--------------------------------")
 print("")
 
+
+# Oppgave 6
+print("Oppgave 6:")
+xx = np.arange(0,10,1)
+yy = withASineOnIt(lagFasit(10))
+print(yy)
+pl.plot(xx, yy)
+pl.axis([0, 10, -0.2, 0.2])
+pl.title("With a Sine on it")
+pl.show()
+print("--------------------------------")
+print("")
+
 # Oppgave 7
 print("Oppgave 7:")
 print("Position of the board with a man on top of it:")
 print(withADudeOnIt())
+xx = np.arange(0,20,1)
+yy = withADudeOnIt()
+pl.plot(xx, yy)
+pl.axis([0, 20, -0.2, 0.2])
+pl.title("With a Dude on it")
+pl.show()
 print("--------------------------------")
 print("")
+
