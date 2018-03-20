@@ -10,6 +10,7 @@ n = 10
 
 density = 480
 L = 2
+h = L/n
 E = 1.3 * (10 ** 10)
 w = 0.3
 d = 0.03
@@ -105,13 +106,24 @@ print("")
 
 # Oppgave 3
 print("Oppgave 3: ")
+y_c = solveForYc(10)
 print()
 print("--------------------------------")
 print("")
 
 # Oppgave 4 (Må fikses)
 print("Oppgave 4: ")
-print(lagFasit(n))
+y_e = lagFasit(n)
+print(y_e)
+b_e = 1/h**4 * np.dot(A.todense(), y_e)
+b_leif = [f/(E*I)]*10
+print(b_e)
+b_f = b_e-b_leif
+print(b_f)
+forwardError = np.max(np.abs(y_e-y_c))
+relForErr = forwardError/(np.max(np.abs(y_e)))
+r_b = 2**-52
+print(relForErr/r_b)
 
 print("--------------------------------")
 print("")
