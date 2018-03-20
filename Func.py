@@ -125,8 +125,12 @@ print(errorList)
 print ("The largest error is "+str(error)+", which is number "+ str(errorIndex)+" in our list. This makes sense when we "
                                                                           "look at the condition number for the different matrices : \n    ")
 print(condList)
-print("Note that we stopped at n = 1280 as computations take too long for larger matrices \n MERK: LEGG UT OM TEORI OM KONDISJONSNUMMER HER"
-      "\n VELGER HER 1-NORM UTEN Å HA NOE PEILING PÅ HVORFOR....")
+print("Note that we stopped at n = 1280 as computations take too long for larger matrices ")
+print("--------------------------------")
+print("")
+
+# Oppgave 7
+print("Oppgave 7:")
 print("Position of the board with a man on top of it:")
 print(withADudeOnIt())
 print("--------------------------------")
