@@ -126,7 +126,9 @@ print("")
 
 # Oppgave 3
 print("Oppgave 3: ")
+print("Ikke-eksakt y-vektor:")
 y_c = solveForYc(10)
+print(y_c)
 print()
 print("--------------------------------")
 print("")
@@ -141,16 +143,33 @@ pl.title("With nothing on it")
 pl.show()
 
 y_e = lagFasit(n)
+print("Eksakt y-vektor:")
 print(y_e)
-b_e = 1/h**4 * np.dot(A.todense(), y_e)
-b_leif = [f/(E*I)]*10
-print(b_e)
-b_f = b_e-b_leif
-print(b_f)
-forwardError = np.max(np.abs(y_e-y_c))
-relForErr = forwardError/(np.max(np.abs(y_e)))
-r_b = 2**-52
-print(relForErr/r_b)
+print()
+
+print("Nummerisk fjerdederivert (1/h^4)*Ay_e:")
+nummeriskFjerdederivert = 1/h**4 * np.dot(A.todense(), y_e)
+print(nummeriskFjerdederivert)
+print()
+
+print("Eksakt fjerdederivert f/EI:")
+eksaktFjerdederivert = [f/(E*I)]*10
+print(eksaktFjerdederivert)
+print()
+
+print("Avstand mellom eksakt og nummerisk")
+feilVektor = nummeriskFjerdederivert - eksaktFjerdederivert
+print(feilVektor)
+print()
+
+print("Forward error:")
+forwardError = np.max(np.abs(feilVektor))
+print(forwardError)
+print("Relativ error:")
+relForErr = forwardError/(np.max(np.abs(eksaktFjerdederivert)))
+print(relForErr)
+backwardsError = 2**-52
+print(relForErr/backwardsError)
 
 print("--------------------------------")
 print("")
