@@ -10,6 +10,7 @@ n = 10
 
 density = 480
 L = 2
+h = L/n
 E = 1.3 * (10 ** 10)
 w = 0.3
 d = 0.03
@@ -105,13 +106,43 @@ print("")
 
 # Oppgave 3
 print("Oppgave 3: ")
+print("Ikke-eksakt y-vektor:")
+y_c = solveForYc(10)
+print(y_c)
 print()
 print("--------------------------------")
 print("")
 
 # Oppgave 4 (Må fikses)
 print("Oppgave 4: ")
-print(lagFasit(n))
+y_e = lagFasit(n)
+print("Eksakt y-vektor:")
+print(y_e)
+print()
+
+print("Nummerisk fjerdederivert (1/h^4)*Ay_e:")
+nummeriskFjerdederivert = 1/h**4 * np.dot(A.todense(), y_e)
+print(nummeriskFjerdederivert)
+print()
+
+print("Eksakt fjerdederivert f/EI:")
+eksaktFjerdederivert = [f/(E*I)]*10
+print(eksaktFjerdederivert)
+print()
+
+print("Avstand mellom eksakt og nummerisk")
+feilVektor = nummeriskFjerdederivert - eksaktFjerdederivert
+print(feilVektor)
+print()
+
+print("Forward error:")
+forwardError = np.max(np.abs(feilVektor))
+print(forwardError)
+print("Relativ error:")
+relForErr = forwardError/(np.max(np.abs(eksaktFjerdederivert)))
+print(relForErr)
+backwardsError = 2**-52
+print(relForErr/backwardsError)
 
 print("--------------------------------")
 print("")
@@ -125,8 +156,12 @@ print(errorList)
 print ("The largest error is "+str(error)+", which is number "+ str(errorIndex)+" in our list. This makes sense when we "
                                                                           "look at the condition number for the different matrices : \n    ")
 print(condList)
-print("Note that we stopped at n = 1280 as computations take too long for larger matrices \n MERK: LEGG UT OM TEORI OM KONDISJONSNUMMER HER"
-      "\n VELGER HER 1-NORM UTEN Å HA NOE PEILING PÅ HVORFOR....")
+print("Note that we stopped at n = 1280 as computations take too long for larger matrices ")
+print("--------------------------------")
+print("")
+
+# Oppgave 7
+print("Oppgave 7:")
 print("Position of the board with a man on top of it:")
 print(withADudeOnIt())
 print("--------------------------------")
