@@ -79,16 +79,19 @@ def getConditionNumber():
         nyN *= 2
     return condlist
 
+
 def withADudeOnIt():
-    myN = 20 # Using n = 20, to correctly add the force of the person, while keeping the condition number lowest possible
+    myN = 1280 # Using n = 20, to correctly add the force of the person, while keeping the condition number lowest possible
     A = csr_matrix(lagA(myN))
     myH = L / myN
-    const = ((myH ** 4) / (E * I)) * f
-    b = np.array([const] * myN)
-    b[myN-1] -= ((myH ** 4) / (E * I))*(g*50/0.3)  # at L
-    b[myN-2] -= ((myH ** 4) / (E * I))*(g*50/0.3)  # at L-0.1
-    b[myN-3] -= ((myH ** 4) / (E * I))*(g*50/0.3)  # at L-0.2
-    b[myN-4] -= ((myH ** 4) / (E * I))*(g*50/0.3)  # at L-0.3
+    const = ((myH ** 4) / (E * I))
+    b = np.array([f] * myN)
+    edge = 1.7
+    for i in range(myN):
+        index = i*myH
+        if(index>edge and index<L):
+            b[i] -= g*50/0.3
+        b[i] *= const
     y = spsolve(A, b)
     return y
 
@@ -168,6 +171,7 @@ print("Oppgave 4: ")
 xx = np.arange(0,n,1)
 yy = lagFasit(n)
 pl.plot(xx, yy)
+pl.plot(y_c)
 pl.axis([0, n, -0.2, 0.2])
 pl.title("With nothing on it")
 pl.show()
@@ -226,7 +230,7 @@ yy = withASineOnItFasit(nn)
 yy2 = withASineOnItNum(nn)
 pl.plot(xx, yy, 'b')
 pl.plot(yy2, 'r')
-pl.axis([0, nn, -0.2, 0.2])
+pl.axis([0, nn, -0.7, 0.7])
 pl.title("With a Sine on it")
 pl.show()
 print("Error")
@@ -253,10 +257,10 @@ print("")
 print("Oppgave 7:")
 print("Position of the board with a man on top of it:")
 print(withADudeOnIt())
-xx = np.arange(0, 20 ,1)
+xx = np.arange(0, 1280 ,1)
 yy = withADudeOnIt()
 pl.plot(xx, yy)
-pl.axis([0, 20, -0.2, 0.2])
+pl.axis([0, 1280, -0.7, 0.7])
 pl.title("With a Dude on it")
 pl.show()
 print("--------------------------------")
