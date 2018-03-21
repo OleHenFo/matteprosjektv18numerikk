@@ -141,6 +141,11 @@ def teoretiskFeil():
     print(errorList)
     return errorList
 
+def finnFinN():
+    errors = allErrorsInSine()
+    minIndex = np.argmin(np.abs(errors))
+    return (2**minIndex)*10
+
 
 # Oppgave 2
 print("Oppgave 2: ")
@@ -239,6 +244,8 @@ pl.loglog(xx1, condAmach, 'g')
 pl.loglog(xx, teoretiskFeil(), 'r')
 pl.title("With a Sine on it (Error)")
 pl.show()
+print("Finn fin N:")
+print(finnFinN())
 print("--------------------------------")
 print("")
 
