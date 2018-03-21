@@ -72,24 +72,26 @@ def findMaxError():
 def getConditionNumber():
     nyN = 10
     condlist = []
-    while nyN < 2000:
-
+    while nyN < 5000:
         m = lagA(nyN).todense()
         condNr = np.linalg.cond(m,1)
         condlist.append(int(condNr))
         nyN *= 2
     return condlist
 
+
 def withADudeOnIt():
-    myN = 20 # Using n = 20, to correctly add the force of the person, while keeping
+    myN = 1280 # Using n = 20, to correctly add the force of the person, while keeping the condition number lowest possible
     A = csr_matrix(lagA(myN))
-    h = L / myN
-    const = ((h ** 4) / (E * I)) * f
-    b = np.array([const] * myN)
-    b[myN-1] -= ((h ** 4) / (E * I))*(g*50/0.3)  # at L
-    b[myN-2] -= ((h ** 4) / (E * I))*(g*50/0.3)  # at L-0.1
-    b[myN-3] -= ((h ** 4) / (E * I))*(g*50/0.3)  # at L-0.2
-    b[myN-4] -= ((h ** 4) / (E * I))*(g*50/0.3)  # at L-0.3
+    myH = L / myN
+    const = ((myH ** 4) / (E * I))
+    b = np.array([f] * myN)
+    edge = 1.7
+    for i in range(myN):
+        index = i*myH
+        if(index>edge and index<L):
+            b[i] -= g*50/0.3
+        b[i] *= const
     y = spsolve(A, b)
     return y
 
@@ -97,13 +99,13 @@ def withADudeOnIt():
 def withASineOnItNum(nn):
     p = 100
     A = csr_matrix(lagA(nn))
-    const = ((h ** 4) / (E * I))
+    hh = L/nn
+    const = ((hh ** 4) / (E * I))
     b = np.array([f]*nn)
-    for i in range(0, nn):
+    for i in range(1, nn+1):
         x = (L / nn) * i
-        b[i] -= (p * g * np.sin((np.pi/L)*x))
-        b[i] = b[i] * const
-    print(b)
+        b[i-1] -= (p * g * np.sin((np.pi/L)*x))
+        b[i-1] = b[i-1] * const
     y = spsolve(A, b)
     return y
 
@@ -115,6 +117,37 @@ def withASineOnItFasit(nn):
         x = (L / nn) * i
         y[i-1] = ((f/(24*E*I))*x**2) * (x**2 - 4*L*x + 6*L**2) - ((p*g*L)/(E*I*np.pi))*(((L**3)/(np.pi**3))*np.sin((np.pi/L)*x) - (x**3)/6 + (L/2)*x**2 - ((L**2)/(np.pi**2))*x)
     return y
+
+
+def errorInSine(nn):
+    numer = withASineOnItNum(nn)
+    fasit = withASineOnItFasit(nn)
+    error = np.abs(fasit - numer)
+    return error
+
+
+def allErrorsInSine():
+    nyNN = 10
+    errorList = []
+    while nyNN<22000:
+        errorList.append(errorInSine(nyNN)[nyNN-1])
+        nyNN *=2
+    return errorList
+
+def teoretiskFeil():
+    minN = 10
+    errorList =[]
+    while minN<22000:
+        errorList.append((L**2)/minN**2)
+        minN *=2
+
+    print(errorList)
+    return errorList
+
+def finnFinN():
+    errors = allErrorsInSine()
+    minIndex = np.argmin(np.abs(errors))
+    return (2**minIndex)*10
 
 
 # Oppgave 2
@@ -139,7 +172,8 @@ print("Oppgave 4: ")
 xx = np.arange(0,n,1)
 yy = lagFasit(n)
 pl.plot(xx, yy)
-pl.axis([0, n, -0.2, 0.2])
+pl.plot(y_c)
+pl.axis([0, n, -0.010, 0.001])
 pl.title("With nothing on it")
 pl.show()
 
@@ -193,22 +227,32 @@ print("")
 
 # Oppgave 6
 print("Oppgave 6:")
-xx = np.arange(0,10,1)
-yy = withASineOnItNum(10)
-print("Numerisk:")
-print(yy)
-pl.plot(xx, yy)
-pl.axis([0, 10, -0.2, 0.2])
-pl.title("With a Sine on it (Numerical)")
+nn = 10
+xx = np.arange(0,nn,1)
+yy = withASineOnItFasit(nn)
+yy2 = withASineOnItNum(nn)
+pl.plot(xx, yy, 'b')
+pl.plot(yy2, 'r')
+pl.axis([0, nn, -0.15, 0.01])
+pl.title("With a Sine on it")
 pl.show()
-xx = np.arange(0,10,1)
-yy = withASineOnItFasit(10)
-print("Fasit:")
+print("Error")
+condAmach= np.zeros(len(condList))
+for i in range (len(condList)):
+    condAmach[i] = condList[i]*2**(-52)
+yy = allErrorsInSine()
+xx = (2**np.arange(0,len(allErrorsInSine()),1))*10
+xx1 = (2**np.arange(0,len(allErrorsInSine())-3,1))*10
+
+print("CondAmach: "+str(condAmach))
 print(yy)
-pl.plot(xx, yy)
-pl.axis([0, 10, -0.2, 0.2])
-pl.title("With a Sine on it (Fasit)")
+pl.loglog(xx, yy)
+pl.loglog(xx1, condAmach, 'g')
+pl.loglog(xx, teoretiskFeil(), 'r')
+pl.title("With a Sine on it (Error)")
 pl.show()
+print("Finn fin N:")
+print(finnFinN())
 print("--------------------------------")
 print("")
 
@@ -216,10 +260,10 @@ print("")
 print("Oppgave 7:")
 print("Position of the board with a man on top of it:")
 print(withADudeOnIt())
-xx = np.arange(0,20,1)
+xx = np.arange(0, 1280 ,1)
 yy = withADudeOnIt()
 pl.plot(xx, yy)
-pl.axis([0, 20, -0.2, 0.2])
+pl.axis([0, 1280, -0.2, 0.02])
 pl.title("With a Dude on it")
 pl.show()
 print("--------------------------------")
