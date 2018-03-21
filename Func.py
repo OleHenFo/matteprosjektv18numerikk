@@ -44,9 +44,9 @@ def solveForYc(n):
 
 def lagFasit(n):
     svar = np.zeros(n)
-    for i in range(0, n):
+    for i in range(1, n+1):
         x = (L / n) * i
-        svar[i] = ((f * (x ** 2)) / (24 * E * I)) * ((6 * (L ** 2)) - (4 * L * x) + x ** 2)
+        svar[i-1] = ((f * (x ** 2)) / (24 * E * I)) * ((6 * (L ** 2)) - (4 * L * x) + x ** 2)
     return svar
 
 
@@ -94,14 +94,27 @@ def withADudeOnIt():
     return y
 
 
-def withASineOnIt(yvektor):
-    p = 0.01
-    nn = len(yvektor)
-    svar = np.zeros(nn)
+def withASineOnItNum(nn):
+    p = 100
+    A = csr_matrix(lagA(nn))
+    const = ((h ** 4) / (E * I))
+    b = np.array([f]*nn)
     for i in range(0, nn):
-        x = (L / n) * i
-        svar[i] = yvektor[i] - (p * g * np.sin((np.pi/L)*x))
-    return svar
+        x = (L / nn) * i
+        b[i] -= (p * g * np.sin((np.pi/L)*x))
+        b[i] = b[i] * const
+    print(b)
+    y = spsolve(A, b)
+    return y
+
+
+def withASineOnItFasit(nn):
+    p = 100
+    y = np.zeros(nn)
+    for i in range(1, nn+1):
+        x = (L / nn) * i
+        y[i-1] = ((f/(24*E*I))*x**2) * (x**2 - 4*L*x + 6*L**2) - ((p*g*L)/(E*I*np.pi))*(((L**3)/(np.pi**3))*np.sin((np.pi/L)*x) - (x**3)/6 + (L/2)*x**2 - ((L**2)/(np.pi**2))*x)
+    return y
 
 
 # Oppgave 2
@@ -124,7 +137,7 @@ xx = np.arange(0,n,1)
 yy = lagFasit(n)
 pl.plot(xx, yy)
 pl.axis([0, n, -0.2, 0.2])
-pl.title("Fasit")
+pl.title("With nothing on it")
 pl.show()
 
 y_e = lagFasit(n)
@@ -159,11 +172,20 @@ print("")
 # Oppgave 6
 print("Oppgave 6:")
 xx = np.arange(0,10,1)
-yy = withASineOnIt(lagFasit(10))
+yy = withASineOnItNum(10)
+print("Numerisk:")
 print(yy)
 pl.plot(xx, yy)
 pl.axis([0, 10, -0.2, 0.2])
-pl.title("With a Sine on it")
+pl.title("With a Sine on it (Numerical)")
+pl.show()
+xx = np.arange(0,10,1)
+yy = withASineOnItFasit(10)
+print("Fasit:")
+print(yy)
+pl.plot(xx, yy)
+pl.axis([0, 10, -0.2, 0.2])
+pl.title("With a Sine on it (Fasit)")
 pl.show()
 print("--------------------------------")
 print("")
