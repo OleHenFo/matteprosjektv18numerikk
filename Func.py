@@ -81,15 +81,15 @@ def getConditionNumber():
     return condlist
 
 def withADudeOnIt():
-    myN = 20 # Using n = 20, to correctly add the force of the person, while keeping
+    myN = 20 # Using n = 20, to correctly add the force of the person, while keeping the condition number lowest possible
     A = csr_matrix(lagA(myN))
-    h = L / myN
-    const = ((h ** 4) / (E * I)) * f
+    myH = L / myN
+    const = ((myH ** 4) / (E * I)) * f
     b = np.array([const] * myN)
-    b[myN-1] -= ((h ** 4) / (E * I))*(g*50/0.3)  # at L
-    b[myN-2] -= ((h ** 4) / (E * I))*(g*50/0.3)  # at L-0.1
-    b[myN-3] -= ((h ** 4) / (E * I))*(g*50/0.3)  # at L-0.2
-    b[myN-4] -= ((h ** 4) / (E * I))*(g*50/0.3)  # at L-0.3
+    b[myN-1] -= ((myH ** 4) / (E * I))*(g*50/0.3)  # at L
+    b[myN-2] -= ((myH ** 4) / (E * I))*(g*50/0.3)  # at L-0.1
+    b[myN-3] -= ((myH ** 4) / (E * I))*(g*50/0.3)  # at L-0.2
+    b[myN-4] -= ((myH ** 4) / (E * I))*(g*50/0.3)  # at L-0.3
     y = spsolve(A, b)
     return y
 
