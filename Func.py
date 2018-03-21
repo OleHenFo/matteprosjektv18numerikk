@@ -128,7 +128,8 @@ print("")
 print("Oppgave 3: ")
 print("Ikke-eksakt y-vektor:")
 y_c = solveForYc(10)
-print(y_c)
+for e in y_c:
+    print("{0:.16f}".format(e))
 print()
 print("--------------------------------")
 print("")
@@ -144,12 +145,14 @@ pl.show()
 
 y_e = lagFasit(n)
 print("Eksakt y-vektor:")
-print(y_e)
+for e in y_e:
+    print("{0:.16f}".format(e))
 print()
 
 print("Nummerisk fjerdederivert (1/h^4)*Ay_e:")
 nummeriskFjerdederivert = 1/h**4 * np.dot(A.todense(), y_e)
-print(nummeriskFjerdederivert)
+for i in range(0,9):
+    print("{0:.16f}".format(nummeriskFjerdederivert.item(i)))
 print()
 
 print("Eksakt fjerdederivert f/EI:")
