@@ -240,6 +240,22 @@ print("")
 print("Oppgave 5: ")
 error, errorIndex, errorList, minIndex,min= findMaxError()
 condList = getConditionNumber()
+
+fig, ax1 = pl.subplots()
+xx = (2 ** np.arange(0, len(errorList), 1)) * 10
+xx1 = (2 ** np.arange(0, len(errorList) - 3, 1)) * 10
+
+ax1.plot(np.log(xx),errorList,'b')
+ax1.set_xlabel('10*2^n')
+# ax1.set_ylabel('feil i x=L', 'b')
+# ax1.tick_params('y', 'b')
+ax2 = ax1.twinx()
+ax2.plot(np.log(xx1), condList, 'r')
+# ax2.set_ylabel('cond(A)', 'r')
+# ax2.tick_params('y', 'r')
+pl.title("Oppg5, feil i x=L ved økende n, samt cond(A)")
+fig.tight_layout()
+pl.show()
 print("List of errors at x= L with n multiplying by two for each element:")
 print(errorList)
 print("The largest error is " + str(error) + ", which is number " + str(
