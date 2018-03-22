@@ -161,7 +161,8 @@ print("")
 print("Oppgave 3: ")
 print("Ikke-eksakt y-vektor:")
 y_c = solveForYc(10)
-print(y_c)
+for e in y_c:
+    print("{0:.16f}".format(e))
 print()
 print("--------------------------------")
 print("")
@@ -178,12 +179,14 @@ pl.show()
 
 y_e = lagFasit(n)
 print("Eksakt y-vektor:")
-print(y_e)
+for e in y_e:
+    print("{0:.16f}".format(e))
 print()
 
 print("Nummerisk fjerdederivert (1/h^4)*Ay_e:")
 nummeriskFjerdederivert = 1/h**4 * np.dot(A.todense(), y_e)
-print(nummeriskFjerdederivert)
+for i in range(0,9):
+    print("{0:.16f}".format(nummeriskFjerdederivert.item(i)))
 print()
 
 print("Eksakt fjerdederivert f/EI:")
@@ -191,7 +194,7 @@ eksaktFjerdederivert = [f/(E*I)]*10
 print(eksaktFjerdederivert)
 print()
 
-print("Avstand mellom eksakt og nummerisk")
+print("Avstand mellom eksakt og nummerisk fjerdederivert:")
 feilVektor = nummeriskFjerdederivert - eksaktFjerdederivert
 print(feilVektor)
 print()
@@ -204,6 +207,11 @@ relForErr = forwardError/(np.max(np.abs(eksaktFjerdederivert)))
 print(relForErr)
 backwardsError = 2**-52
 print(relForErr/backwardsError)
+print()
+
+y_f = y_e-y_c
+forErr = y_f[0]
+print("||y_c-y_e||_1: {}".format(y_f[0]))
 
 print("--------------------------------")
 print("")
