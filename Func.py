@@ -124,13 +124,21 @@ def withASineOnItFasit(nn):
                                    (L ** 2) / (np.pi ** 2)) * x)
     return y
 
-
 def errorInSine(nn):
     numer = withASineOnItNum(nn)
     fasit = withASineOnItFasit(nn)
     error = np.abs(fasit - numer)
     return error
 
+def makeSineLines(howMany):
+    nn = 10
+    fasit = withASineOnItFasit(10)[9]
+    numer = []
+    while nn < howMany:
+        numer.append(withASineOnItNum(nn)[nn-1])
+        nn *= 2
+    lines = [fasit, numer]
+    return lines
 
 def allErrorsInSine():
     nyNN = 10
@@ -253,6 +261,19 @@ pl.plot(yy2, 'r')
 pl.axis([0, nn, -0.15, 0.01])
 pl.title("With a Sine on it")
 pl.show()
+
+print("Sine lines")
+nnn = 20500
+lines = makeSineLines(nnn)
+length = len(lines[1])
+print(lines)
+xx = np.arange(0, length, 1)
+yy = [lines[0]]*length
+yy2 = lines[1]
+pl.plot(xx, yy, 'g')
+pl.plot(xx, yy2, 'r')
+pl.title("Sine ytterst")
+pl.show()
 print("Error")
 condAmach = np.zeros(len(condList))
 for i in range(len(condList)):
@@ -260,7 +281,6 @@ for i in range(len(condList)):
 yy = allErrorsInSine()
 xx = (2 ** np.arange(0, len(allErrorsInSine()), 1)) * 10
 xx1 = (2 ** np.arange(0, len(allErrorsInSine()) - 3, 1)) * 10
-
 print("CondAmach: " + str(condAmach))
 print(yy)
 pl.loglog(xx, yy)
