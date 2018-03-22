@@ -194,7 +194,7 @@ eksaktFjerdederivert = [f/(E*I)]*10
 print(eksaktFjerdederivert)
 print()
 
-print("Avstand mellom eksakt og nummerisk")
+print("Avstand mellom eksakt og nummerisk fjerdederivert:")
 feilVektor = nummeriskFjerdederivert - eksaktFjerdederivert
 print(feilVektor)
 print()
@@ -207,6 +207,11 @@ relForErr = forwardError/(np.max(np.abs(eksaktFjerdederivert)))
 print(relForErr)
 backwardsError = 2**-52
 print(relForErr/backwardsError)
+print()
+
+y_f = y_e-y_c
+forErr = y_f[0]
+print("||y_c-y_e||_1: {}".format(y_f[0]))
 
 print("--------------------------------")
 print("")
